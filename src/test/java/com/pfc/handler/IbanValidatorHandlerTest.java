@@ -44,7 +44,9 @@ class IbanValidatorHandlerTest {
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 
         assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, httpResponse.getStatusLine().getStatusCode());
-        assertTrue(EntityUtils.toString(httpResponse.getEntity()).contains("GET not allowed"));
+        String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        assertTrue(jsonResponse.contains("GET not allowed"));
+        assertTrue(jsonResponse.contains("false"));
     }
 
     @Test
@@ -56,7 +58,9 @@ class IbanValidatorHandlerTest {
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 
         assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
-        assertTrue(EntityUtils.toString(httpResponse.getEntity()).contains("Endpoint not found"));
+        String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        assertTrue(jsonResponse.contains("Endpoint not found"));
+        assertTrue(jsonResponse.contains("false"));
     }
 
     @Test
@@ -74,8 +78,49 @@ class IbanValidatorHandlerTest {
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(httpPost);
 
         assertEquals(HttpStatus.SC_BAD_REQUEST, httpResponse.getStatusLine().getStatusCode());
-        assertTrue(EntityUtils.toString(httpResponse.getEntity()).contains("MalformedJsonException"));
+        String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        assertTrue(jsonResponse.contains("MalformedJsonException"));
+        assertTrue(jsonResponse.contains("false"));
     }
 
+    @Test
+    @DisplayName("Should return ok if the IBAN is not valid and the message")
+    public void badRequestIbanNotValid() throws IOException {
+
+        HttpPost httpPost = new HttpPost("http://localhost:8091/iban");
+
+        String json = "{\"iban\": \"AT26 3621 8487 6967 5322\"}";
+        StringEntity entity = new StringEntity(json);
+        httpPost.setEntity(entity);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(httpPost);
+
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+        String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        assertTrue(jsonResponse.contains("IBAN is not valid"));
+        assertTrue(jsonResponse.contains("false"));
+    }
+
+    @Test
+    @DisplayName("Should return ok if the IBAN is valid")
+    public void okIbanValid() throws IOException {
+
+        HttpPost httpPost = new HttpPost("http://localhost:8091/iban");
+
+        String json = "{\"iban\": \"AT26 3621 8477 6967 5322\"}";
+        StringEntity entity = new StringEntity(json);
+        httpPost.setEntity(entity);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(httpPost);
+
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+        String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        assertTrue(jsonResponse.contains("IBAN is valid"));
+        assertTrue(jsonResponse.contains("true"));
+    }
 
 }

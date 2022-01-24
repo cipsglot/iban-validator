@@ -31,6 +31,7 @@ Request example:
 Response example:
 ``` 
 {
+    "isValid": true,
     "message": "IBAN is valid"
 }
 ```

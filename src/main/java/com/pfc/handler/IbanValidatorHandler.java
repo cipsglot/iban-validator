@@ -40,7 +40,7 @@ public class IbanValidatorHandler extends AbstractHandler {
         response.setContentType("application/json;charset=UTF-8");
         if (!HttpMethod.POST.asString().equalsIgnoreCase(request.getMethod())) {
             response.setStatus(SC_METHOD_NOT_ALLOWED);
-            response.getWriter().println(gson.toJson(new ApiResponse(request.getMethod() + " not allowed")));
+            response.getWriter().println(gson.toJson(new ApiResponse(false, request.getMethod() + " not allowed")));
         } else {
             if (IBAN_API.equals(target)) {
                 try {
@@ -48,19 +48,19 @@ public class IbanValidatorHandler extends AbstractHandler {
                     if (apiRequestOpt.isPresent()) {
                         IbanValidation validation = ibanValidatorService.isValid(apiRequestOpt.get().getIban());
                         response.setStatus(validation.isValidationError() ? SC_BAD_REQUEST : SC_OK);
-                        response.getWriter().println(gson.toJson(new ApiResponse(validation.getMessage())));
+                        response.getWriter().println(gson.toJson(new ApiResponse(validation.isValid(), validation.getMessage())));
                     } else {
                         response.setStatus(SC_BAD_REQUEST);
-                        response.getWriter().println(gson.toJson(new ApiResponse("Empty body")));
+                        response.getWriter().println(gson.toJson(new ApiResponse(false, "Empty body")));
                     }
                 } catch (JsonSyntaxException | JsonIOException jsonEx) {
                     LOG.error("Unable to process the request body", jsonEx);
                     response.setStatus(SC_BAD_REQUEST);
-                    response.getWriter().println(gson.toJson(new ApiResponse(jsonEx.getMessage())));
+                    response.getWriter().println(gson.toJson(new ApiResponse(false, jsonEx.getMessage())));
                 }
             } else {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().println(gson.toJson(new ApiResponse("Endpoint not found")));
+                response.getWriter().println(gson.toJson(new ApiResponse(false, "Endpoint not found")));
             }
         }
     }
