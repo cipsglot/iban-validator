@@ -36,8 +36,8 @@ public class IbanValidatorService {
         }
 
         return calculateIbanMod(ibanWithoutSpace) == 1
-                ? validationSuccessResponse("IBAN is valid")
-                : validationErrorResponse("IBAN is not valid");
+                ? validationSuccessResponse(true, "IBAN is valid")
+                : validationSuccessResponse(false, "IBAN is not valid");
     }
 
     private int calculateIbanMod(String iban) {
@@ -65,10 +65,10 @@ public class IbanValidatorService {
     }
 
     private IbanValidation validationErrorResponse(String message) {
-        return new IbanValidation(false, message);
+        return new IbanValidation(false, true, message);
     }
 
-    private IbanValidation validationSuccessResponse(String message) {
-        return new IbanValidation(true, message);
+    private IbanValidation validationSuccessResponse(boolean valid, String message) {
+        return new IbanValidation(valid, false, message);
     }
 }

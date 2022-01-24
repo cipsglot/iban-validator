@@ -47,7 +47,7 @@ public class IbanValidatorHandler extends AbstractHandler {
                     Optional<ApiRequest> apiRequestOpt = Optional.ofNullable(gson.fromJson(request.getReader(), ApiRequest.class));
                     if (apiRequestOpt.isPresent()) {
                         IbanValidation validation = ibanValidatorService.isValid(apiRequestOpt.get().getIban());
-                        response.setStatus(validation.isValid() ? SC_OK : SC_BAD_REQUEST);
+                        response.setStatus(validation.isValidationError() ? SC_BAD_REQUEST : SC_OK);
                         response.getWriter().println(gson.toJson(new ApiResponse(validation.getMessage())));
                     } else {
                         response.setStatus(SC_BAD_REQUEST);

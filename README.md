@@ -14,7 +14,6 @@ Simple rest endpoint to validate IBANs
 -```docker-start``` will start the application in a docker container. 
 Note: ```docker-build``` should be run first to create the docker image.
 
-
 ** **
 
 Server port: ```9081```
@@ -35,3 +34,7 @@ Response example:
     "message": "IBAN is valid"
 }
 ```
+
+** **
+
+The main entry of the application is ```com.pfc.RestServer```. 

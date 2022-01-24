@@ -18,14 +18,17 @@ class IbanValidatorServiceTest {
 
         IbanValidation nullValidation = service.isValid(null);
         assertFalse(nullValidation.isValid());
+        assertTrue(nullValidation.isValidationError());
         assertEquals("Empty or blank IBAN is not allowed", nullValidation.getMessage());
 
         IbanValidation emptyValidation = service.isValid("");
         assertFalse(emptyValidation.isValid());
+        assertTrue(emptyValidation.isValidationError());
         assertEquals("Empty or blank IBAN is not allowed", emptyValidation.getMessage());
 
         IbanValidation blankValidation = service.isValid(" ");
         assertFalse(blankValidation.isValid());
+        assertTrue(blankValidation.isValidationError());
         assertEquals("Empty or blank IBAN is not allowed", blankValidation.getMessage());
     }
 
@@ -34,13 +37,15 @@ class IbanValidatorServiceTest {
     void notValidTooShort() {
         IbanValidatorService service = new IbanValidatorService(Collections.emptyMap());
 
-        IbanValidation nullValidation = service.isValid("a f h");
-        assertFalse(nullValidation.isValid());
-        assertEquals("IBAN is too short", nullValidation.getMessage());
+        IbanValidation shortValidationSpaces = service.isValid("a f h");
+        assertFalse(shortValidationSpaces.isValid());
+        assertTrue(shortValidationSpaces.isValidationError());
+        assertEquals("IBAN is too short", shortValidationSpaces.getMessage());
 
-        IbanValidation emptyValidation = service.isValid("afg");
-        assertFalse(emptyValidation.isValid());
-        assertEquals("IBAN is too short", emptyValidation.getMessage());
+        IbanValidation shortValidation = service.isValid("afg");
+        assertFalse(shortValidation.isValid());
+        assertTrue(shortValidation.isValidationError());
+        assertEquals("IBAN is too short", shortValidation.getMessage());
     }
 
     @Test
@@ -48,13 +53,15 @@ class IbanValidatorServiceTest {
     void notValidCountryNotSupported() {
         IbanValidatorService service = new IbanValidatorService(Map.of("AS", 21, "SE", 24));
 
-        IbanValidation nullValidation = service.isValid("IT123413523");
-        assertFalse(nullValidation.isValid());
-        assertEquals("Country is not supported", nullValidation.getMessage());
+        IbanValidation countryValidation1 = service.isValid("IT123413523");
+        assertFalse(countryValidation1.isValid());
+        assertTrue(countryValidation1.isValidationError());
+        assertEquals("Country is not supported", countryValidation1.getMessage());
 
-        IbanValidation emptyValidation = service.isValid("DE1234235");
-        assertFalse(emptyValidation.isValid());
-        assertEquals("Country is not supported", emptyValidation.getMessage());
+        IbanValidation countryValidation2 = service.isValid("DE1234235");
+        assertFalse(countryValidation2.isValid());
+        assertTrue(countryValidation2.isValidationError());
+        assertEquals("Country is not supported", countryValidation2.getMessage());
     }
 
     @Test
@@ -62,13 +69,15 @@ class IbanValidatorServiceTest {
     void notValidCountryLength() {
         IbanValidatorService service = new IbanValidatorService(Map.of("AS", 21, "SE", 24));
 
-        IbanValidation nullValidation = service.isValid("SE123413523");
-        assertFalse(nullValidation.isValid());
-        assertEquals("IBAN is not of the expected length for the given country", nullValidation.getMessage());
+        IbanValidation lengthValidation1 = service.isValid("SE123413523");
+        assertFalse(lengthValidation1.isValid());
+        assertTrue(lengthValidation1.isValidationError());
+        assertEquals("IBAN is not of the expected length for the given country", lengthValidation1.getMessage());
 
-        IbanValidation emptyValidation = service.isValid("AS1234235");
-        assertFalse(emptyValidation.isValid());
-        assertEquals("IBAN is not of the expected length for the given country", emptyValidation.getMessage());
+        IbanValidation lengthValidation2 = service.isValid("AS1234235");
+        assertFalse(lengthValidation2.isValid());
+        assertTrue(lengthValidation2.isValidationError());
+        assertEquals("IBAN is not of the expected length for the given country", lengthValidation2.getMessage());
     }
 
     @Test
@@ -76,13 +85,15 @@ class IbanValidatorServiceTest {
     void notValidIban() {
         IbanValidatorService service = new IbanValidatorService(Map.of("IT", 27, "SE", 24));
 
-        IbanValidation nullValidation = service.isValid("SE8314976738589148951498");
-        assertFalse(nullValidation.isValid());
-        assertEquals("IBAN is not valid", nullValidation.getMessage());
+        IbanValidation notValid1 = service.isValid("SE8314976738589148951498");
+        assertFalse(notValid1.isValid());
+        assertFalse(notValid1.isValidationError());
+        assertEquals("IBAN is not valid", notValid1.getMessage());
 
-        IbanValidation emptyValidation = service.isValid("IT47Q0300203280327722877582");
-        assertFalse(emptyValidation.isValid());
-        assertEquals("IBAN is not valid", emptyValidation.getMessage());
+        IbanValidation notValid2 = service.isValid("IT47Q0300203280327722877582");
+        assertFalse(notValid2.isValid());
+        assertFalse(notValid2.isValidationError());
+        assertEquals("IBAN is not valid", notValid2.getMessage());
     }
 
     @Test
@@ -90,13 +101,15 @@ class IbanValidatorServiceTest {
     void validIban() {
         IbanValidatorService service = new IbanValidatorService(Map.of("IT", 27, "SE", 24));
 
-        IbanValidation nullValidation = service.isValid("SE1827417766875674442214");
-        assertTrue(nullValidation.isValid());
-        assertEquals("IBAN is valid", nullValidation.getMessage());
+        IbanValidation valid1 = service.isValid("SE1827417766875674442214");
+        assertTrue(valid1.isValid());
+        assertFalse(valid1.isValidationError());
+        assertEquals("IBAN is valid", valid1.getMessage());
 
-        IbanValidation emptyValidation = service.isValid("IT47Q0300203280327722877482");
-        assertTrue(emptyValidation.isValid());
-        assertEquals("IBAN is valid", emptyValidation.getMessage());
+        IbanValidation valid2 = service.isValid("IT47Q0300203280327722877482");
+        assertTrue(valid2.isValid());
+        assertFalse(valid2.isValidationError());
+        assertEquals("IBAN is valid", valid2.getMessage());
     }
 
 }
