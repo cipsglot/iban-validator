@@ -44,6 +44,7 @@ class IbanValidatorHandlerTest {
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 
         assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED, httpResponse.getStatusLine().getStatusCode());
+        // TODO: move to map and check the attribute
         String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
         assertTrue(jsonResponse.contains("GET not allowed"));
         assertTrue(jsonResponse.contains("false"));
@@ -59,6 +60,7 @@ class IbanValidatorHandlerTest {
 
         assertEquals(HttpStatus.SC_NOT_FOUND, httpResponse.getStatusLine().getStatusCode());
         String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        // TODO: move to map and check the attribute
         assertTrue(jsonResponse.contains("Endpoint not found"));
         assertTrue(jsonResponse.contains("false"));
     }
@@ -79,6 +81,7 @@ class IbanValidatorHandlerTest {
 
         assertEquals(HttpStatus.SC_BAD_REQUEST, httpResponse.getStatusLine().getStatusCode());
         String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        // TODO: move to map and check the attribute
         assertTrue(jsonResponse.contains("MalformedJsonException"));
         assertTrue(jsonResponse.contains("false"));
     }
@@ -99,6 +102,7 @@ class IbanValidatorHandlerTest {
 
         assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
         String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        // TODO: move to map and check the attribute
         assertTrue(jsonResponse.contains("IBAN is not valid"));
         assertTrue(jsonResponse.contains("false"));
     }
@@ -119,6 +123,7 @@ class IbanValidatorHandlerTest {
 
         assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
         String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+        // TODO: move to map and check the attribute
         assertTrue(jsonResponse.contains("IBAN is valid"));
         assertTrue(jsonResponse.contains("true"));
     }
