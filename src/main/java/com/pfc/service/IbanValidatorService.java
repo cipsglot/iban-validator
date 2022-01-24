@@ -47,7 +47,7 @@ public class IbanValidatorService {
         StringBuilder builder = new StringBuilder(9);
         for (int index = 0; index < ibanRearranged.length(); index++) {
             if (builder.length() / 9 == 1) {
-                int mod = Integer.parseInt(builder.toString()) % 97;
+                long mod = Long.parseLong(builder.toString()) % 97;
                 builder = new StringBuilder(9);
                 builder.append(mod);
             }

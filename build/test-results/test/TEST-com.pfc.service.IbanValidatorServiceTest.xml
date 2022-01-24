@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.pfc.service.IbanValidatorServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-01-23T21:16:23" hostname="CSPIRIDON-MD6M.local" time="0.01">
+<testsuite name="com.pfc.service.IbanValidatorServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-01-24T07:25:58" hostname="CSPIRIDON-MD6M.local" time="0.03">
   <properties/>
-  <testcase name="name()" classname="com.pfc.service.IbanValidatorServiceTest" time="0.01"/>
+  <testcase name="Should return not valid if IBAN is null, empty, or blank" classname="com.pfc.service.IbanValidatorServiceTest" time="0.016"/>
+  <testcase name="Should return not valid if IBAN's length is not as defined per country" classname="com.pfc.service.IbanValidatorServiceTest" time="0.001"/>
+  <testcase name="Should return valid if the IBAN is valid" classname="com.pfc.service.IbanValidatorServiceTest" time="0.01"/>
+  <testcase name="Should return not valid if the IBAN is not valid" classname="com.pfc.service.IbanValidatorServiceTest" time="0.001"/>
+  <testcase name="Should return not valid if IBAN is too short" classname="com.pfc.service.IbanValidatorServiceTest" time="0.0"/>
+  <testcase name="Should return not valid if IBAN's country is not supported" classname="com.pfc.service.IbanValidatorServiceTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
